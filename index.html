@@ -4,12 +4,43 @@
     <meta charset="UTF-8">
     <title>Rock, Paper, Scissors</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="javascript.js"></script>
-
+    <script defer src="javascript.js"></script>
 </head>
 <body>
 
-<h1>Rock, Paper, Scissors</h1>
+
+<h1>- Rock - Paper - Scissors -</h1>
+
+<div id="number-of-games-container">
+    <h3 class="number-of-games">How many games needed to win?</h3>
+    <h3 class="number-of-games" id="games-amount" ><input id="games-amount-num" type="text" value="5"></h3>
+    <div id="play-btn-box">
+        <button id="play-btn">Click to play automatically</button>
+    </div>
+    
+</div>
+<div id="scoreboard-head"><h1 id="total-games-played">Total games played: 0</h1></div>
+<div id="scoreboard-head">
+    <h1>Your Score</h1>
+    <h1>Computer Score</h1>
+</div>
+<div id="scoreboard">
+    <h1 id="score-player">0</h1>
+    <h1 id="score-computer">0</h1>
+</div>
+
+<div id="buttons">
+    <button class="player-choice" id="btn-rock">Rock</button>
+    <button class="player-choice" id="btn-paper">Paper</button>
+    <button class="player-choice" id="btn-scissors">Scissors</button>
+</div>
+
+<h1 id="game-results"></h1>
+
+<code>
+    <ul id="game-history"></ul>
+</code>
+
 
 </body>
 </html>

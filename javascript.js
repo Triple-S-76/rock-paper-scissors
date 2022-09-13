@@ -1,10 +1,25 @@
-// Choose number of games to play here
-let numOfGames = 5;
+
+let numOfGamesChoice = document.getElementById('games-amount-num');
+numOfGamesChoice.addEventListener('input', setNumberOfGames);
+
+function setNumberOfGames(event) {
+    numOfGames = event.target.value;
+}
+
+let numOfGames = numOfGamesChoice.value;
 
 let playerScore = 0;
 let computerScore = 0;
 
+let result;
+
+let scoreboardPlayer = document.getElementById('score-player');
+let scoreboardComputer = document.getElementById('score-computer');
+
 let computerChoice;
+let playerChoice;
+
+let gameResults = document.getElementById('game-results');
 
 // getComputerChoice() gets a random number (1, 2, 3) then converts it to Rock, Paper or Scissors
 function getComputerChoice() {
@@ -16,18 +31,11 @@ function getComputerChoice() {
     } else {
         computerChoice = 'Scissors';
     }
-}
+};
 
-let playerChoice;
-let playerChoiceAutoNumber;
-
-// playerChoiceAuto() gets a random number (1, 2, 3) for the player
+// playerChoiceAuto() gets a random number (1, 2, 3) then converts it to Rock, Paper or Scissors
 function playerChoiceAuto() {
-    playerChoiceAutoNumber = Math.floor(Math.random() * 3) + 1;
-}    
-
-// playerSelectionConvert() converts 1, 2 or 3 to Rock, Paper or Scissors
-function playerSelectionConvert() {
+    let playerChoiceAutoNumber = Math.floor(Math.random() * 3) + 1;
     if (playerChoiceAutoNumber === 1) {
         playerChoice = 'Rock';
     } else if (playerChoiceAutoNumber === 2) {
@@ -35,9 +43,7 @@ function playerSelectionConvert() {
     } else {
         playerChoice = 'Scissors';
     }
-}
-
-let result;
+}    
 
 // playRound() plays 1 round, adds 1 to the winner's score and returns the results
 function playRound(computerChoice, playerChoice) {
@@ -74,30 +80,61 @@ function playRound(computerChoice, playerChoice) {
     } else {
         return 'Something messed up.';
     }
-}
+};
 
-game(numOfGames);
+let playButton = document.getElementById('play-btn');
+playButton.addEventListener('click', gameAuto);
 
-// Plays multiple games & keeps score, then displays result
-function game(num) {
-    for (let i = 0; i < num; i++) {
+let buttonHTML = document.getElementsByClassName('player-choice');
+let buttons = Array.from(buttonHTML);
+buttons.forEach(element => element.addEventListener('click', playGame));
+
+// Plays automatic games & keeps score, then displays result
+function gameAuto() {
+
+    let playerCanPlay = numOfGames > playerScore;
+    let computerCanPlay = numOfGames > computerScore;
+
+    if (playerCanPlay == false || computerCanPlay == false) {
+        return
+    }
+
+    for (;playerScore < numOfGames && computerScore < numOfGames;) {
         getComputerChoice();
         playerChoiceAuto();
-        playerSelectionConvert();
         result = playRound(computerChoice, playerChoice);
-        console.log(result);
+        updateScoreboard();
+    }
+};
+
+function playGame(event) {
+
+    let playerCanPlay = numOfGames > playerScore;
+    let computerCanPlay = numOfGames > computerScore;
+
+    if (playerCanPlay == false || computerCanPlay == false) {
+        return
     }
 
-    // Display both scores to the console
-    console.log('Player Score: ' + playerScore);
-    console.log('Computer Score: ' + computerScore);
+    playerChoice = event.target.innerText;
+    getComputerChoice();
+    result = playRound(computerChoice, playerChoice);
+    updateScoreboard();
+}
 
-    // Display final result in the console
-    if (playerScore === computerScore) {
-        console.log('It\'s a Tie! ' + playerScore + ' to ' + computerScore);
-    } else if (playerScore < computerScore) {
-        console.log('Computer Wins ' + computerScore + ' to ' + playerScore);
-    } else {
-        console.log('You Won ' + playerScore + ' to ' + computerScore);
-    }
+let gameHistory = document.getElementById('game-history');
+let totalGamesPlayed = 1;
+let scoreboardTotalGames = document.getElementById('total-games-played');
+
+
+function updateScoreboard() {
+    let history = document.getElementById('game-history');
+    let newLine = document.createElement('li');
+    newLine.textContent = 'Game Number: ' + totalGamesPlayed + ' - ' + result;
+    history.prepend(newLine);
+    totalGamesPlayed += 1;
+    scoreboardPlayer.textContent = playerScore;
+    scoreboardComputer.textContent = computerScore;
+    gameResults.textContent = result;
+    scoreboardTotalGames.textContent = 'Total games played: ' + (totalGamesPlayed - 1);
 }
